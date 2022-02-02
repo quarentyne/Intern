@@ -9,22 +9,23 @@ const checkIsAnagramm = function(str1, str2){
 // 3
 
 // С рекурсией 
-let count = 0;
-const getNumberAmout = function(num){   
-    console.log(num);
+const getNumberAmout = function(num, count){    
+    count = count || 0;
     if(num>-10 && num<10){
-        console.log(++count);
-        return count++;
+        return ++count;
     }    
     count++;
-    getNumberAmout(num/10);
+    return getNumberAmout(num/10, count);
 }
-console.log(getNumberAmout(100));
 
 // Без рекурсии
 
 const getNumberAmout2 = function(num){
-    return num.toString().length;
+    let count = 0;
+    for(count; num>=1; count++) {
+        num/=10;
+    }
+    return count;
 }
 
 // 4
@@ -58,15 +59,12 @@ const getWordsCount = function(string){
         }else{
           wordCount[word]++;}
     }
-    let resultString = '';
-    for(let word in wordCount){
-        resultString += `'${word}' встретилось ${wordCount[word]} раз; `;
-    }
-    return resultString;
+    return wordCount;
 }
 
 // 7
 
+// По классам
 class Triangle{
     constructor(a,b,c){
         this.a = a;
@@ -107,12 +105,46 @@ class Rectangle{
     }
 };
 
+// Функция конструктор
+
+function TriangleConstructor(a, b, c){
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.getPerimeter = function(){
+        return this.a + this.b + this.c;
+    }
+    this.getSquare = function(){
+        let halfPerimeter = this.getPerimeter() / 2;
+        return Math.sqrt(halfPerimeter * (halfPerimeter - this.a) * (halfPerimeter - this.b) * (halfPerimeter - this.c))
+    }
+}
+
+function CircleConstructor(radius){
+    this.radius = radius;
+    this.getPerimeter = function(){
+        return 2 * this.radius * Math.PI;
+    }
+    this.getSquare = function(){
+        return Math.PI * (this.radius ** 2);
+    }
+}
+
+function RectangleConstructor(a,b){
+    this.a = a;
+    this.b = b;
+    this.getPerimeter = function(){
+        return 2 * (this.a + this.b);
+    }
+    this.getSquare = function(){
+        return this.a * this.b;
+    }
+}
 //  8
 
-const factorial = function(){
+const factorial = (function(){
     const cashe = {};
     return function getFactorial(num) {
-        console.log(num);
         if(num === 0){
             return 1;
         }
@@ -121,67 +153,151 @@ const factorial = function(){
         }
         return num * cashe[num];
     }
-};
+})();
 
 // Факториал числа без рекурсии
 
-const fact = num => {
-    let result = 1;
-    while (num>0){
-        result *= num;
-        num--;
+const fact = (function(){
+    const cashe = {};
+    return function getFact(num) {
+        let result = 1;
+        for(let i = 0; i<=num; i++){
+            if(i===0){
+                cashe[0]=1;
+            }
+            if(!cashe[i]){
+                result = result * i;
+                cashe[i] = result; 
+            }
+        }
+        return cashe[num];        
     }
-    return result;
-}
+})();
 
-// 9
-
-// const getSummFromArray = function(arr){
-//     let odd = odd || 0;
-//     let even = even || 0;
-//     let oddPositive = oddPositive || 0;
-//     if(arr.length){
-        
+// // 9
+// // С рекурсией
+// const getSummFromArrayRecursion = function(numbers, index){
+//     index = index || 0;
+//     if(numbers.length <= index){
+//         return 0;
+//     }   
+//     let number = numbers[index];
+//     if(number%2 === 0 || number%3 ===0 || (number>0 && number %2 !==0)){
+//         return number + getSummFromArrayRecursion(numbers, index+1);
+//     }else{
+//         return 0 + getSummFromArrayRecursion(numbers, index+1);
 //     }
 // }
 
-// 10
 
-// const getElemsCount = function (arr){
-//     let zero = 0;
-//     let positive = 0;
-//     let negative = 0;
-//     let simple = 0;
-//     for(let elem of arr){
-//         console.log(simple);
-//         if(elem === 0){
-//             zero++;
-//         }else{
-//             for (let i = 2; i <= elem; i++) {
-//                 let flag = 1;
-//                 for (let j = 2; (j <= i/2)&&(flag==1); j++) {
-//                    if (i%j==0) {
-//                        flag=0;
-//                     }
-//                   }
-//                 }
-//                if (flag) {
-//                    simple++;
-//                }
-//             }
-//             if(elem < 0){
-//                 negative++;
-//             }
-//             else{
-//                 positive++;
-//             }                   
-//     const result = [zero, positive, negative, simple];
+// // Без рекурсии
+// const getSummFromArray = function(numbers){
+//     let result = 0;
+//     for(let number of numbers){
+//         if(number%2 === 0 || number%3 ===0 || (number>0 && number %2 !==0)){
+//             result +=number;
+//         }
+//     }
 //     return result;
+// }    
+
+
+// // 10
+// // Нулевые, отрицательные, положительные, простые числа, какие есть еще? 
+// const getElemsCount = function (numbers){
+//     let count = 0;
+//     for(let number of numbers){
+//         if(typeof number === 'number' && Number.isInteger(number)){
+//             count++;
+//         }
 //     }
+//     return count;
 // }
-// console.log(getElemsCount([0,2,4,-3,9,8,-7]));
+
 
 // 11
+function fromBinary(num) {
+    return parseInt(+num, 2);
+}
+function toBinary(num) {
+    return num.toString(2)
+}
+
+// // 12
 
 
-// 12
+
+// // 13
+
+
+// // 14
+
+// const getMeanFromArray = function (array){
+//     if(Array.isArray(array[1])){
+//         array = array[0].concat(array[1]);
+//     }
+//     let even = [];
+//     let odd = [];
+//     for(let num of array){
+//         if(num%2 === 0){
+//             even.push(num);
+//         }else{
+//             odd.push(num);
+//         }
+//     }
+//     let evenMean = even.reduce((a,b) => a+b, 0)/even.length;
+//     let oddMean = odd.reduce((a,b) => a+b, 0)/odd.length;
+//     return ([evenMean, oddMean])
+// }
+// console.log(getMeanFromArray([[1,2,3,4,5,5],[1,3,5,2,1]]))
+
+// 15
+
+const sumMatrix = function (matrix){
+    const transposed = matrix[0].map((col, i) => matrix.map(row => row[i]));
+    const matrixSum = [];
+    for(let i = 0; i<matrix.length; i++){
+        if(matrix[i].length !== transposed[i].length){
+            throw new Error('Сложение невозможно, матрицы разного размера');
+        }
+        matrixSum[i] = [];
+        for(let j = 0; j<matrix[i].length; j++){
+            matrixSum[i][j] = matrix[i][j] + transposed[i][j];
+        }
+    }
+    return matrixSum;
+}
+
+// 16
+
+const deleteRowsWithZero = function (array){
+    for(let i = 0; i<array.length; i++){
+        if(array[i].includes(0)){
+            array.splice(i,1);
+        }
+    }
+    return array;
+}
+
+const deleteColumnWithZero = function (array){
+    const deleteIndex = new Set();
+    let key = 0;
+    for(let i = 0; i<array.length; i++){
+        for(let j = 0; j<array[i].length; j++){
+            if(array[i][j] === 0 && key <= j){
+                deleteIndex.add(j);
+                key++;
+            }
+        }
+    }
+    let count = 0;
+    for(let key of deleteIndex.values()){
+        for(let i = 0; i<array.length; i++){
+            array[i].splice(key+count,1);
+
+        }   
+        // Если происходило удаление, то нужно уменьшить каунт?????
+    }
+    return array;
+}
+console.log(deleteColumnWithZero([[0,0,1, 7,3,0],[2,1,1,6,4,1],[0,8,1,2,0,1]]));
