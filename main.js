@@ -1,6 +1,6 @@
 'use strict'
 
-//1
+//1 ????????????????????????????????????????????????????????????????????????????????????????
 
 const checkIsAnagramm = function(str1, str2){
     return str1.split('').sort().join('')===str2.split('').sort().join('');
@@ -42,19 +42,22 @@ const checkIsPalindrom = function(str){
     }
     return result;
 }
-// 5 ?????????????????????????????????????????????????????????????????????
+// 5 
 
 const getCountUniqWords = function(string){
-    const stringWords = string.split(' ');
+    string = string.trim().toLowerCase().replace(/[^a-zа-яё\s]/g, '');  
+    const stringWords = string.split(' ').filter(value => value);
     const uniqWords = new Set(stringWords);
+    console.log(uniqWords);
     return uniqWords.size;
 }
 
-// 6
+// 6 
 
-const getWordsCount = function(string){
+const getWordsCount = function (string) {
+    string = string.trim().toLowerCase().replace(/[^a-zа-яё\s]/g, ''); 
     const wordCount = {};
-    const stringWords = string.split(' ');
+    const stringWords = string.split(' ').filter(value => value);
     for(let word of stringWords){
         if(!wordCount[word]){
             wordCount[word] = 1;
@@ -157,7 +160,8 @@ const factorial = (function(){
     }
 })();
 
-// Факториал числа без рекурсии ?????????????????????????????????????????????????????????
+
+// Факториал числа без рекурсии с мемоизацией
 
 const fact = (function(){
     const cashe = {};
@@ -218,29 +222,61 @@ const getElemsCount = function (array, callback) {
 	return count;
 }
 
-// 11 ????????????????????????????????????????????????????????????????????????????????????
+// 11 
 function fromBinary(num) {
-  return parseInt(num, 2);
+    let result = 0;
+    const arr = [];
+    const numLength = Math.ceil(Math.log10(num + 1));
+    let i = 10 ** (numLength-1);
+    while (i >= 1) {
+        let trunced = Math.trunc(num / i);
+        arr.push(trunced);
+        trunced = trunced * i;
+        i = i / 10;
+        num = num - trunced;
+    }
+    for (let index = 0; index < arr.length; index++){
+        result = result * 2 + arr[index];
+    }
+    return result;
 }
+
 function toBinary(num) {
-	return parseInt(num, 10)
+    const array = [];
+    while (num / 2 > 0) {
+        array.push(num % 2);
+        num = Math.floor(num / 2);
+    }
+    return array.reverse().join('');
 }
 
+// 12 
 
-
-// console.log(toBinary(7));
-
-// 12 ?????????????????????????????????????????????????????????????????????????????????????????????
-
-const takeActionWithTwoDimensionalArray = function (array, func, callback) {
-	let newArray = [];
-	for (let i = 0; i < array.length; i++){
-		newArray = newArray.concat(array[i]);
-	}
-	return func(newArray, callback);
+const getSumTwoDimensionalArray = function (array, callback) {
+    let result = null;
+    for (let i = 0; i < array.length; i++){
+        for (let j = 0; j < array[i].length; j++){
+            if (callback(array[i][j])) {
+			result += array[i][j];
+		    }
+        }
+    }
+    return result;
 }
 
-// 13
+const getElemsCountTwoDimensionalArray = function (array, callback) {
+    let result = 0;
+    for (let i = 0; i < array.length; i++){
+        for (let j = 0; j < array[i].length; j++){
+            if (callback(array[i][j])) {
+                result++;
+            }
+        }
+    }
+    return result;
+}
+
+// 13 ???????????????????????????????????????????????????????????????????????????????????????????????
 
 // Без рекурсии
 
@@ -268,87 +304,97 @@ const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result
 	return getSumFromSegmentOfNumbersRecursion(min, max, callback, result)
 }
 
-// ?????????????????????????????????????????????????????????????????????????????????????????????
-// const getSumFromSegmentOfNumbersMemoized = function () {
-// 	const memo = {/*параметр функции*/};
-// 	return function getSum(min, max, callback, result) {
-// 		let result = result || null;
-// 		while (min < max) {
-			
-// 		}
-// 		return result;
-// 	}
-// }
+// 14
 
-// // 14
+const averageArraysElements = function (array, callback) {
+    const filteredArray = array.filter(callback);
+    return filteredArray.reduce((a, b) => a + b, 0)/filteredArray.length;
+}
 
-// const getMeanFromArray = function (array){
-//     if(Array.isArray(array[1])){
-//         array = array[0].concat(array[1]);
-//     }
-//     let even = [];
-//     let odd = [];
-//     for(let num of array){
-//         if(num%2 === 0){
-//             even.push(num);
-//         }else{
-//             odd.push(num);
-//         }
-//     }
-//     let evenMean = even.reduce((a,b) => a+b, 0)/even.length;
-//     let oddMean = odd.reduce((a,b) => a+b, 0)/odd.length;
-//     return ([evenMean, oddMean])
-// }
-// console.log(getMeanFromArray([[1,2,3,4,5,5],[1,3,5,2,1]]))
-
-// 15
-
-const sumMatrix = function (matrix){
-    const transposed = matrix[0].map((col, i) => matrix.map(row => row[i]));
-    const matrixSum = [];
-    for(let i = 0; i<matrix.length; i++){
-        if(matrix[i].length !== transposed[i].length){
-            throw new Error('Сложение невозможно, матрицы разного размера');
+const averageTwoDimensionalArraysElements = function (array, callback) {
+    let result = null;
+    for (let i = 0; i < array.length; i++){
+        const filtered = array[i].filter(callback);
+        if(filtered.length!==0){
+            result += filtered.reduce((a, b) => a + b, 0) / filtered.length;
         }
-        matrixSum[i] = [];
-        for(let j = 0; j<matrix[i].length; j++){
-            matrixSum[i][j] = matrix[i][j] + transposed[i][j];
+    }  
+    return result;
+}
+
+// 15 
+
+const transposeMatrix = function (matrix) {
+    const transposed = [];
+    const originalLength = matrix.length;
+    for (let i = 0; i < originalLength; i++) {
+        transposed.push([]);
+    }
+    for (let i = 0; i < originalLength; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            transposed[j].push(matrix[i][j]);
         }
     }
+    return transposed;
+}
+
+
+const getMatrixSum = function (matrix1, matrix2) {
+    const matrixSum = [];
+    const err = 'Эти массивы не могут быть просуммированы';    
+    for (let i = 0; i < matrix1.length; i++){
+        if (matrix1[i].length !== matrix2[i].length) {
+            throw new Error(err);
+        }
+        matrixSum[i] = [];
+        for (let j = 0; j < matrix1[i].length; j++){
+            matrixSum[i][j] = matrix1[i][j] + matrix2[i][j];
+        }
+    }    
     return matrixSum;
 }
 
+
+
 // 16
 
-// const deleteRowsWithZero = function (array){
-//     for(let i = 0; i<array.length; i++){
-//         if(array[i].includes(0)){
-//             array.splice(i,1);
-//         }
-//     }
-//     return array;
-// }
+const deleteRowsWithZero = function (array){
+    for(let i = 0; i<array.length; i++){
+        if(array[i].includes(0)){
+            array.splice(i,1);
+        }
+    }
+    return array;
+}
 
-// const deleteColumnWithZero = function (array){
-//     const deleteIndex = new Set();
-//     let key = 0;
-//     for(let i = 0; i<array.length; i++){
-//         for(let j = 0; j<array[i].length; j++){
-//             if(array[i][j] === 0 && key <= j){
-//                 deleteIndex.add(j);
-//                 key++;
-//             }
-//         }
-//     }
-//     let count = 0;
-//     for(let key of deleteIndex.values()){
-//         for(let i = 0; i<array.length; i++){
-//             array[i].splice(key+count,1);
+const deleteColumnWithZero = function (array){
+    const deleteIndex = new Set();
+    for(let i = 0; i<array.length; i++){
+        for(let j = 0; j<array[i].length; j++){
+            if(array[i][j] === 0 ){
+                deleteIndex.add(j);
+            }
+        }
+    }
+    const zeroesIndex = [];
+    let count = 0;
+    for (let key of deleteIndex.values()) {
+        zeroesIndex.push(key);
+    }
+    zeroesIndex.sort((a, b) => a > b);
+    for(let key of zeroesIndex){
+        for(let i = 0; i<array.length; i++){
+            array[i].splice(key+count,1);
+        }  
+        count--;
+    }
+    return array;
+}
+console.log(deleteColumnWithZero([[0, 0, 1, 0, 2, 3, 0, 1, 0, 4], [2, 1, 1, 8, 2, 3, 0, 0, 5, 4], [0, 8, 1, 7, 2, 3, 0, 9, 5, 4]]));
 
-//         }   
-//         // Если происходило удаление, то нужно уменьшить каунт?????
-//     }
-//     return array;
-// }
-// console.log(deleteColumnWithZero([[0, 0, 1, 7, 3, 0], [2, 1, 1, 6, 4, 1], [0, 8, 1, 2, 0, 1]]));
+// 17
+// i === j - главная ось, должны правильно пробежаться циклы. Если выполняется условие, то вызывается коллбек
 
+const takeActionOnMatrix = function (matrix, direction, callback) {
+    
+}
