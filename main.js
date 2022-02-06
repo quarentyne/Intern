@@ -472,7 +472,7 @@ const takeActionOnMatrix = function (matrix, direction, func) {
 // 18
 
 const fibonachiObject = {
-    start: 2,
+    start: 1,
     end: 5,
     current: 1,
     prev: 0,
@@ -485,9 +485,9 @@ const fibonachiObject = {
             nextNum: 0,
             next() {
                 if (this.start < this.end) {
-                    this.nextNum = this.current + this.prev;
+                    this.nextNum = this.prev;
                     this.prev = this.current;
-                    this.current = this.nextNum;
+                    this.current = this.nextNum + this.current;
                     this.start++;
                     return {
                         value: this.nextNum,
@@ -505,35 +505,72 @@ const fibonachiObject = {
 };
 
 const fiboObj = {
-    start: 2,
+    start: 1,
     end: 10,
     current: 1,
     prev: 0,
     nextNum: 0,
     [Symbol.iterator]: function* () {
         for (let i = this.start; i < this.end; i++) {
-            this.nextNum = this.current + this.prev;
+            this.nextNum = this.prev;
             this.prev = this.current;
-            this.current = this.nextNum;
+            this.current = this.nextNum + this.current;
             yield this.nextNum;
         }
     }
 }
-// for (let item of fiboObj) {
+
+
+function* fibonachi() {
+    let prev = 0;
+    let current = 1;
+    while (true) {
+        let result = prev;
+        prev = current;
+        current = result + current;
+        yield result;
+    }
+}
+let generatorFibonachy = fibonachi()
+
+// //////////////////////////////////////
+
+function* fibonachiRecursion(num, index, prev, current) {
+    index = index || 0;
+    prev = prev || 0;
+    current = current || 1;
+    let result = prev;
+    prev = current;
+    current = result + current;
+    if (index < num) {
+        index++;
+        yield* fibonachiRecursion(num, index, prev, current);
+    }
+    yield result;
+}
+
+
+// const memoFibo = (function () {
+//     const memo = {};
+//     return function* (num, index, prev, current) {
+//         index = index || 0;
+//         prev = prev || 0;
+//         current = current || 1;
+//         let result = prev;
+//         prev = current;
+//         current = result + current;
+//         if (!memo[index]) {
+//             memo[index] = yield* fibonachiRecursion(num, index++, prev, current);
+//         }
+//         yield result;
+//         console.log(memo);
+//     }
+// })()
+
+// for (let item of memoFibo(7)) {
 //     console.log(item);
 // }
 
-// const getFibonachyFromObject = num => {
-//     if (num < 0) {
-//         throw new Error('Введите положительное число')
-//     }
-//     const result = [];
-//     fibonachiObject.end = num;
-//     for (let fibs of fibonachiObject) {
-//         result.push(fibs);
-//     }
-//     return result;
-// };
 
 // 19
 
@@ -593,3 +630,12 @@ const bitwiseNot = function (num) {
 const bitwiseNotEasy = function (num) {
     return -num - 1;
 }
+// function bitWiseOperatorSecondVariant(num) {
+//     if (num < 0) {
+//         return Math.abs(num) - 1
+//     }
+//     if (num > 0) {
+//         return num - (num * 2 + 1)
+//     }
+//     return -1
+// }
