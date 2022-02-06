@@ -57,7 +57,7 @@ const checkIsAnagramm2 = function (firstString, secondString) {
     }
     return true;
 }
-// 2 ?????????????????????????????????????????????????????????????????????????????????????????
+// 2 Intern\block diagram\ex2.jpg
 
 // 3
 
@@ -444,12 +444,98 @@ const deleteColumnWithZero = function (array) {
     return array;
 }
 
-// 17
+// 17 ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
 // i === j - главная ось, должны правильно пробежаться циклы. Если выполняется условие, то вызывается коллбек
 
-const takeActionOnMatrix = function (matrix, direction, callback) {
-
+const takeActionOnMatrix = function (matrix, direction, func) {
+    let elements = [];
+    for (let i = 0; i < matrix.length; i++) {
+        for (let j = 0; j < matrix[i].length; j++) {
+            if (direction(i, j)) {
+                elements.push(matrix[i][j]);
+            }
+        }
+    }
+    return func(elements);
 }
+
+// function avarage(array) {
+//     let sum = 0;
+//     for (let item of array) {
+//         sum += item;
+//     }
+//     return sum / array.length;
+// }
+
+// console.log(takeActionOnMatrix([[1, 1, 1], [20, 10, 0], [100, 100, 0]], ((a, b) => a < b), avarage));
+
+// 18
+
+const fibonachiObject = {
+    start: 2,
+    end: 5,
+    current: 1,
+    prev: 0,
+    [Symbol.iterator]() {
+        return {
+            start: this.start,
+            end: this.end,
+            current: this.current,
+            prev: this.prev,
+            nextNum: 0,
+            next() {
+                if (this.start < this.end) {
+                    this.nextNum = this.current + this.prev;
+                    this.prev = this.current;
+                    this.current = this.nextNum;
+                    this.start++;
+                    return {
+                        value: this.nextNum,
+                        done: false,
+                    };
+                } else {
+                    return {
+                        value: undefined,
+                        done: true,
+                    };
+                }
+            },
+        };
+    },
+};
+
+const fiboObj = {
+    start: 2,
+    end: 10,
+    current: 1,
+    prev: 0,
+    nextNum: 0,
+    [Symbol.iterator]: function* () {
+        for (let i = this.start; i < this.end; i++) {
+            this.nextNum = this.current + this.prev;
+            this.prev = this.current;
+            this.current = this.nextNum;
+            yield this.nextNum;
+        }
+    }
+}
+// for (let item of fiboObj) {
+//     console.log(item);
+// }
+
+// const getFibonachyFromObject = num => {
+//     if (num < 0) {
+//         throw new Error('Введите положительное число')
+//     }
+//     const result = [];
+//     fibonachiObject.end = num;
+//     for (let fibs of fibonachiObject) {
+//         result.push(fibs);
+//     }
+//     return result;
+// };
+
+// 19
 
 
 // 20 ?????????????????????????????????????????????????????????????????????????????????????????
