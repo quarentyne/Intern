@@ -62,20 +62,20 @@ const checkIsAnagramm2 = function (firstString, secondString) {
 // 3
 
 // С рекурсией 
-const getNumberAmoutRecursion = function (num, count) {
+const getNumberAmoutRecursion = function (number, count) {
     count = count || 0;
-    if (num > -10 && num < 10) {
+    if (number > -10 && number < 10) {
         return ++count;
     }
     count++;
-    return getNumberAmoutRecursion(num / 10, count);
+    return getNumberAmoutRecursion(number / 10, count);
 }
 
 // Без рекурсии
 
-const getNumberAmout = function (num) {
+const getNumberAmout = function (number) {
     let count = 0;
-    for (count; num >= 1; count++) {
+    for (count; number >= 1; count++) {
         num /= 10;
     }
     return count;
@@ -394,10 +394,9 @@ const transposeMatrix = function (matrix) {
 
 const getMatrixSum = function (matrix1, matrix2) {
     const matrixSum = [];
-    const err = 'Эти массивы не могут быть просуммированы';
     for (let i = 0; i < matrix1.length; i++) {
         if (matrix1[i].length !== matrix2[i].length) {
-            throw new Error(err);
+            throw new Error('Эти массивы не могут быть просуммированы');
         }
         matrixSum[i] = [];
         for (let j = 0; j < matrix1[i].length; j++) {
@@ -459,20 +458,10 @@ const takeActionOnMatrix = function (matrix, direction, func) {
     return func(elements);
 }
 
-// function avarage(array) {
-//     let sum = 0;
-//     for (let item of array) {
-//         sum += item;
-//     }
-//     return sum / array.length;
-// }
-
-// console.log(takeActionOnMatrix([[1, 1, 1], [20, 10, 0], [100, 100, 0]], ((a, b) => a < b), avarage));
-
 // 18
 
 const fibonachiObject = {
-    start: 1,
+    start: 0,
     end: 5,
     current: 1,
     prev: 0,
@@ -505,7 +494,7 @@ const fibonachiObject = {
 };
 
 const fiboObj = {
-    start: 1,
+    start: 0,
     end: 10,
     current: 1,
     prev: 0,
@@ -531,55 +520,52 @@ function* fibonachi() {
         yield result;
     }
 }
-let generatorFibonachy = fibonachi()
+let generatorFibonachy = fibonachi();
+
 
 // //////////////////////////////////////
 
-function* fibonachiRecursion(num, index, prev, current) {
-    index = index || 0;
-    prev = prev || 0;
-    current = current || 1;
-    let result = prev;
-    prev = current;
-    current = result + current;
-    if (index < num) {
-        index++;
-        yield* fibonachiRecursion(num, index, prev, current);
+const fibonachiRecursion = function (number) {
+    if (number <= 1) {     
+        return number;        
+    } else {        
+        return fibonachiRecursion(number - 1) + fibonachiRecursion(number - 2);        
     }
-    yield result;
 }
 
-
-// const memoFibo = (function () {
-//     const memo = {};
-//     return function* (num, index, prev, current) {
-//         index = index || 0;
-//         prev = prev || 0;
-//         current = current || 1;
-//         let result = prev;
-//         prev = current;
-//         current = result + current;
-//         if (!memo[index]) {
-//             memo[index] = yield* fibonachiRecursion(num, index++, prev, current);
-//         }
-//         yield result;
-//         console.log(memo);
-//     }
-// })()
-
-// for (let item of memoFibo(7)) {
-//     console.log(item);
-// }
-
+ const fibonachiMemoized = (function() {
+  const memory = {};
+  function func(number) {
+    let value;
+    if (number in memory) {
+        value = memory[number];
+    } else {
+      if (number === 0 || number === 1)
+        value = number;
+      else
+        value = func(number - 1) + func(number - 2);
+        memory[number] = value;
+    }
+    return value;
+  }
+  return func;
+})();
 
 // 19
+function* trafficLightGenerator () {
+    while (true) {
+        yield red;
+        yield yellow
+        yield green
+        yield yellow
+    }
+}
 
+// 20 
 
-// 20 ?????????????????????????????????????????????????????????????????????????????????????????
-//  максимально допустимое число 2 147 483 647 для 32бит
-const isNegativeNumber = function (num) {
-    num = toBinary((num >>> 0));
-    return (num.length === 32 && num[0] === '1');
+const checkIsNegativeNumber = function (num) {
+    return (num & (1 << 63)) === (1 << 63);
+    return num << -1;
 }
 
 const getNumberOfBits = function (num) {
@@ -597,45 +583,20 @@ const getNumberOfBits = function (num) {
     return result;
 }
 
-const bitwiseNot = function (num) {
-    // const bitwiseArray = new Array(32).fill('0');
-    // num = toBinary((num >>> 0));
-    // let length = num.length - 1;
-    // for (let i = length, j = 0; i >= 0; i--, j++) {
-    //     bitwiseArray[bitwiseArray.length - i - 1] = num[j];
-    // }
-    // for (let i = 0; i < bitwiseArray.length; i++) {
-    //     if (bitwiseArray[i] === '0') {
-    //         bitwiseArray[i] = '1';
-    //     } else {
-    //         bitwiseArray[i] = '0';
-    //     }
-    // }
-    // console.log(bitwiseArray);
-    // num = toBinary((num + 1 >>> 0));
-    // console.log(num);
-    // let endNumber = [];
-    // for (let i = 0; i < num.length; i++) {
-    //     if (num[i] === '0') {
-    //         endNumber[i] = '1';
-    //     } else {
-    //         endNumber[i] = '0';
-    //     }
-    // }
-    // console.log(endNumber);
-    // return toDecimal(num) * (-1)
-}
-// console.log(bitwiseNot(-10));
-
 const bitwiseNotEasy = function (num) {
     return -num - 1;
 }
-// function bitWiseOperatorSecondVariant(num) {
-//     if (num < 0) {
-//         return Math.abs(num) - 1
-//     }
-//     if (num > 0) {
-//         return num - (num * 2 + 1)
-//     }
-//     return -1
-// }
+const bitwiseNot = function (num) {
+    return num ^ (-1);
+}
+
+let a = 1;
+let s = "";
+for (let i = 0; i < 100; i++) {
+    if ((a & (1 << i)) === (1 << i)) {
+        s += "1";
+    } else {
+        s += "0";
+    }
+}
+console.log(s);
