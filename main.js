@@ -1,36 +1,67 @@
 'use strict'
 
+Array.prototype.myFilter = function (callback) {
+    const result = [];
+    for (let i = 0; i < this.length; i++) {
+        if (callback(this[i])) {
+            result.push(this[i]);
+        };
+    };
+    return result;
+};
+
+Array.prototype.myJoin = function (separator) {
+    let string;
+    if (separator !== undefined) {
+        string = this.toString().replace(/,/g, separator);
+    } else {
+        string = this.toString();
+    };
+    return string;
+};
+
+Array.prototype.myIncludes = function (element) {
+    for (let item of this) {
+        if (item === element) {
+            return true;
+        };
+    };
+    return false;
+}
 
 String.prototype.deleteSpaces = function () {
     return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
 };
-String.prototype.splitCharacters = function () {
-    const wordsArray = [];
-    for (let item of this) {
-        wordsArray.push(item);
-    }
-    return wordsArray;
-}
 
-//1 ????????????????????????????????????????????????????????????????????????????????????????
+String.prototype.mySplitForSymbol = function () {
+    return Array.from(this);
+};
+
+String.prototype.mySplitBySpaces = function (separator, limit) {
+    limit = limit || null;
+    let word = '';
+    const wordsArray = [];
+    for (let i = 0; i < this.length; i++) {
+        if (this[i] !== separator) {
+            word += this[i];
+        };
+        if (this[i] === separator || i === this.length - 1) {
+            wordsArray.push(word);
+            word = '';
+            if (wordsArray.length === limit) {
+                break;
+            };
+        };
+    };
+    return wordsArray;
+};
+
+//1 
 
 const checkIsAnagramm = function (firstString, secondString) {
-    firstString = firstString.deleteSpaces().toLowerCase();
-    secondString = secondString.deleteSpaces().toLowerCase();
-    if (firstString.length !== secondString.length) {
-        return false;
-    }
-    const firstArray = firstString.splitCharacters().sort((a, b) => a.localeCompare(b));
-    const secondArray = secondString.splitCharacters().sort((a, b) => a.localeCompare(b));
-    for (let i = 0; i < firstArray.length; i++) {
-        if (firstArray[i] !== secondArray[i]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-const checkIsAnagramm2 = function (firstString, secondString) {
+    if (typeof firstString !== 'string' || typeof secondString !== 'string') {
+        throw new Error('Операция возможна только над строками');
+    };
     firstString = firstString.deleteSpaces().toLowerCase();
     secondString = secondString.deleteSpaces().toLowerCase();
     if (firstString.length !== secondString.length) {
@@ -48,25 +79,28 @@ const checkIsAnagramm2 = function (firstString, secondString) {
             charSecondString[secondString[i]] = 1;
         } else {
             charSecondString[secondString[i]]++;
-        }
-    }
+        };
+    };
     for (let key in charFirstString) {
         if (charFirstString[key] !== charSecondString[key]) {
             return false;
-        }
-    }
+        };
+    };
     return true;
 }
-// 2 Intern\block diagram\ex2.jpg
+// 2 Intern Diagrams/diagramEx2.png
 
 // 3
 
 // С рекурсией 
 const getNumberAmoutRecursion = function (number, count) {
+    if (typeof number !== 'number') {
+        throw new Error('Введены некорректные данные');
+    };
     count = count || 0;
     if (number > -10 && number < 10) {
         return ++count;
-    }
+    };
     count++;
     return getNumberAmoutRecursion(number / 10, count);
 }
@@ -74,30 +108,41 @@ const getNumberAmoutRecursion = function (number, count) {
 // Без рекурсии
 
 const getNumberAmout = function (number) {
+    if (typeof number !== 'number') {
+        throw new Error('Введены некорректные данные');
+    };
     let count = 0;
     for (count; number >= 1; count++) {
         num /= 10;
-    }
+    };
     return count;
 }
 
 // 4
 
 const checkIsPalindrom = function (str) {
+    if(typeof str !== 'string'){
+        throw new Error('Введены некорректные данные');
+    };
     let result = true;
     for (let i = 0; i < str.length; i++) {
         if (str[i] !== str[str.length - 1 - i]) {
             result = false;
             return result;
-        }
-    }
+        };
+    };
     return result;
 }
+
 // 5 
 
 const getCountUniqWords = function (string) {
-    string = string.trim().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
-    const stringWords = string.split(' ').filter(value => value);
+    if(typeof string !== 'string'){
+        throw new Error('Введены некорректные данные');
+    };
+    string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
+    const stringWords = string.mySplitBySpaces(' ').filter(value => value);
+    console.log(stringWords);
     const uniqWords = new Set(stringWords);
     return uniqWords.size;
 }
@@ -105,16 +150,19 @@ const getCountUniqWords = function (string) {
 // 6 
 
 const getWordsCount = function (string) {
-    string = string.trim().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
+    if(typeof string !== 'string'){
+        throw new Error('Введены некорректные данные');
+    };
+    string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
     const wordCount = {};
-    const stringWords = string.split(' ').filter(value => value);
+    const stringWords = string.mySplitBySpaces(' ').filter(value => value);
     for (let word of stringWords) {
         if (!wordCount[word]) {
             wordCount[word] = 1;
         } else {
             wordCount[word]++;
-        }
-    }
+        };
+    };
     return wordCount;
 }
 
@@ -122,17 +170,18 @@ const getWordsCount = function (string) {
 
 // По классам
 class Triangle {
-    constructor(sideOne, sideTwo, sideThree) {
-        this.sideOne = sideOne;
-        this.sideTwo = sideTwo;
-        this.sideThree = sideThree;
+    constructor(base, firstAdditionalSide, secondAdditionalSide) {
+        this.base = base;
+        this.firstAdditionalSide = firstAdditionalSide;
+        this.secondAdditionalSide = secondAdditionalSide;
     }
     getPerimeter() {
-        return this.sideOne + this.sideTwo + this.sideThree;
+        return this.base + this.firstAdditionalSide + this.secondAdditionalSide;
     }
     getSquare() {
         let halfPerimeter = this.getPerimeter() / 2;
-        return Math.sqrt(halfPerimeter * (halfPerimeter - this.sideOne) * (halfPerimeter - this.sideTwo) * (halfPerimeter - this.sideThree))
+        return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
+            (halfPerimeter - this.secondAdditionalSide))
     }
 };
 
@@ -163,16 +212,17 @@ class Rectangle {
 
 // Функция конструктор
 
-function TriangleConstructor(sideOne, sideTwo, sideThree) {
-    this.sideOne = sideOne;
-    this.sideTwo = sideTwo;
-    this.sideThree = sideThree;
+function TriangleConstructor(base, firstAdditionalSide, secondAdditionalSide) {
+    this.base = base;
+    this.firstAdditionalSide = firstAdditionalSide;
+    this.secondAdditionalSide = secondAdditionalSide;
     this.getPerimeter = function () {
-        return this.sideOne + this.sideTwo + this.sideThree;
+        return this.base + this.firstAdditionalSide + this.secondAdditionalSide;
     }
     this.getSquare = function () {
         let halfPerimeter = this.getPerimeter() / 2;
-        return Math.sqrt(halfPerimeter * (halfPerimeter - this.sideOne) * (halfPerimeter - this.sideTwo) * (halfPerimeter - this.sideThree))
+        return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
+            (halfPerimeter - this.secondAdditionalSide))
     }
 }
 
@@ -196,60 +246,60 @@ function RectangleConstructor(length, width) {
         return this.length * this.width;
     }
 }
+
 //  8
 
-const factorial = (function () {
-    const cashe = {};
-    return function getFactorial(num) {
-        if (num === 0) {
+const getFactorialMemo = (function () {
+    const memory = {};
+    return function recursionFact(number) {
+        if (typeof number !== 'number') {        
+            throw new Error('Введены некорректные данные');
+        };
+        if (number === 0) {
             return 1;
+        };
+        if (!memory[number]) {
+            memory[number] = recursionFact(number - 1);
         }
-        if (!cashe[num]) {
-            cashe[num] = getFactorial(num - 1);
-        }
-        return num * cashe[num];
-    }
-})();
+        return number* memory[number];
+    };
+})()
 
-
-// Факториал числа без рекурсии с мемоизацией
-
-const fact = (function () {
-    const cashe = {};
-    return function getFact(num) {
-        let result = 1;
-        for (let i = 0; i <= num; i++) {
-            if (i === 0) {
-                cashe[0] = 1;
-            }
-            if (!cashe[i]) {
-                result = result * i;
-                cashe[i] = result;
-            }
-        }
-        return cashe[num];
-    }
-})();
+const getFactorialCycle = function (number) {
+    if (typeof number !== 'number') {        
+        throw new Error('Введены некорректные данные');
+    };
+    let result = 1;
+    for (let i = 1; i <= number; i++){
+        result = result * i;
+    };
+    return result;
+}
 
 // 9
 // С рекурсией
 const getSummFromArrayRecursion = function (array, callback, result, index) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     result = result || null;
     index = index || 0;
     if (index >= array.length) {
         return result;
-    }
+    };
     let element = 0;
     if (callback(array[index])) {
         element = array[index];
-    }
+    };
     result += element;
     return getSummFromArrayRecursion(array, callback, result, ++index);
 }
 
-
 // Без рекурсии
 const getSummFromArray = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     let result = null;
     for (let i = 0; i < array.length; i++) {
         let element = 0;
@@ -261,69 +311,83 @@ const getSummFromArray = function (array, callback) {
     return result;
 }
 
-
 // 10
+
 const getElemsCount = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     let count = 0;
     for (let number of array) {
         if (callback(number)) {
             count++;
-        }
-    }
+        };
+    };
     return count;
 }
 
 // 11 
-function toDecimal(num) {
+
+function toDecimal(number) {
     let result = 0;
-    const arr = [];
-    const numLength = Math.ceil(Math.log10(num + 1));
+    const numbersArray = [];
+    const numLength = Math.ceil(Math.log10(number + 1));
     let i = 10 ** (numLength - 1);
     while (i >= 1) {
-        let trunced = Math.trunc(num / i);
-        arr.push(trunced);
+        let trunced = Math.trunc(number / i);
+        numbersArray.push(trunced);
         trunced = trunced * i;
         i = i / 10;
-        num = num - trunced;
-    }
-    for (let index = 0; index < arr.length; index++) {
-        result = result * 2 + arr[index];
-    }
+        number = number - trunced;
+    };
+    for (let index = 0; index < numbersArray.length; index++) {
+        result = result * 2 + numbersArray[index];
+    };
     return result;
 }
 
-function toBinary(num) {
-    const array = [];
-    while (num / 2 > 0) {
-        array.push(num % 2);
-        num = Math.floor(num / 2);
-    }
-    return array.reverse().join('');
+function toBinary(number) {
+    const numbersArray = [];
+    while (number / 2 > 0) {
+        numbersArray.push(number % 2);
+        number = Math.floor(number / 2);
+    };
+    let result = '';
+    for (let i = numbersArray.length - 1; i >= 0; i--){
+        result += numbersArray[i];
+    };
+    return result;
 }
 
 // 12 
 
 const getSumTwoDimensionalArray = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     let result = null;
     for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array[i].length; j++) {
             if (callback(array[i][j])) {
                 result += array[i][j];
-            }
-        }
-    }
+            };
+        };
+    };
     return result;
 }
 
 const getElemsCountTwoDimensionalArray = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     let result = 0;
     for (let i = 0; i < array.length; i++) {
         for (let j = 0; j < array[i].length; j++) {
             if (callback(array[i][j])) {
                 result++;
-            }
-        }
-    }
+            };
+        };
+    };
     return result;
 }
 
@@ -332,46 +396,58 @@ const getElemsCountTwoDimensionalArray = function (array, callback) {
 // Без рекурсии
 
 const getSumFromSegmentOfNumbers = function (min, max, callback) {
+    if (typeof callback !== 'function' || typeof min !== 'number' || typeof max !== 'number') {
+        throw new Error('Введены некорректные данные');
+    };
     let result = null;
     for (let i = min; i <= max; i++) {
         if (callback(i)) {
             result += i;
-        }
-    }
+        };
+    };
     return result;
 }
 
 // С рекурсией
 
 const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result) {
+    if (typeof callback !== 'function' || typeof min !== 'number' || typeof max !== 'number') {
+        throw new Error('Введены некорректные данные');
+    };
     result = result || null;
     if (min >= max) {
         return result;
-    }
+    };
     if (callback(min)) {
         result += min;
-    }
+    };
     min++;
-    return getSumFromSegmentOfNumbersRecursion(min, max, callback, result)
+    return getSumFromSegmentOfNumbersRecursion(min, max, callback, result);
 }
 
 // Блок схема Intern\block diagram\ex13.jpg
 
 // 14
 
-const averageArraysElements = function (array, callback) {
-    const filteredArray = array.filter(callback);
+const takeAverageArraysElements = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
+    const filteredArray = array.myFilter(callback);
     return filteredArray.reduce((a, b) => a + b, 0) / filteredArray.length;
 }
 
-const averageTwoDimensionalArraysElements = function (array, callback) {
+const takeAverageTwoDimensionalArraysElements = function (array, callback) {
+    if (typeof callback !== 'function') {
+        throw new Error('Введены некорректные данные');
+    };
     let result = null;
     for (let i = 0; i < array.length; i++) {
-        const filtered = array[i].filter(callback);
+        const filtered = array[i].myFilter(callback);
         if (filtered.length !== 0) {
             result += filtered.reduce((a, b) => a + b, 0) / filtered.length;
-        }
-    }
+        };
+    };
     return result;
 }
 
@@ -382,40 +458,37 @@ const transposeMatrix = function (matrix) {
     const originalLength = matrix.length;
     for (let i = 0; i < originalLength; i++) {
         transposed.push([]);
-    }
+    };
     for (let i = 0; i < originalLength; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             transposed[j].push(matrix[i][j]);
-        }
-    }
+        };
+    };
     return transposed;
 }
-
 
 const getMatrixSum = function (matrix1, matrix2) {
     const matrixSum = [];
     for (let i = 0; i < matrix1.length; i++) {
         if (matrix1[i].length !== matrix2[i].length) {
             throw new Error('Эти массивы не могут быть просуммированы');
-        }
+        };
         matrixSum[i] = [];
         for (let j = 0; j < matrix1[i].length; j++) {
             matrixSum[i][j] = matrix1[i][j] + matrix2[i][j];
-        }
-    }
+        };
+    };
     return matrixSum;
 }
-
-
 
 // 16
 
 const deleteRowsWithZero = function (array) {
     for (let i = 0; i < array.length; i++) {
-        if (array[i].includes(0)) {
+        if (array[i].myIncludes(0)) {
             array.splice(i, 1);
-        }
-    }
+        };
+    };
     return array;
 }
 
@@ -425,36 +498,38 @@ const deleteColumnWithZero = function (array) {
         for (let j = 0; j < array[i].length; j++) {
             if (array[i][j] === 0) {
                 deleteIndex.add(j);
-            }
-        }
-    }
+            };
+        };
+    };
     const zeroesIndex = [];
     let count = 0;
     for (let key of deleteIndex.values()) {
         zeroesIndex.push(key);
-    }
+    };
     zeroesIndex.sort((a, b) => a - b);
     for (let key of zeroesIndex) {
         for (let i = 0; i < array.length; i++) {
             array[i].splice(key + count, 1);
-        }
+        };
         count--;
-    }
+    };
     return array;
 }
 
-// 17 ?????????????????????????????????????????????????????????????????????????????????????????????????????????????????????????
-// i === j - главная ось, должны правильно пробежаться циклы. Если выполняется условие, то вызывается коллбек
+// 17 
 
-const takeActionOnMatrix = function (matrix, direction, func) {
+const takeActionOnMatrix = function (matrix, direction, resultFunction) {
+    if (typeof direction !== 'function' || typeof resultFunction !== 'function') {
+        throw new Error('Эти массивы не могут быть просуммированы');
+    };
     let elements = [];
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
             if (direction(i, j)) {
                 elements.push(matrix[i][j]);
-            }
-        }
-    }
+            };
+        };
+    };
     return func(elements);
 }
 
@@ -462,7 +537,7 @@ const takeActionOnMatrix = function (matrix, direction, func) {
 
 const fibonachiObject = {
     start: 0,
-    end: 5,
+    end: 10,
     current: 1,
     prev: 0,
     [Symbol.iterator]() {
@@ -487,7 +562,7 @@ const fibonachiObject = {
                         value: undefined,
                         done: true,
                     };
-                }
+                };
             },
         };
     },
@@ -505,10 +580,9 @@ const fiboObj = {
             this.prev = this.current;
             this.current = this.nextNum + this.current;
             yield this.nextNum;
-        }
-    }
+        };
+    },
 }
-
 
 function* fibonachi() {
     let prev = 0;
@@ -522,58 +596,83 @@ function* fibonachi() {
 }
 let generatorFibonachy = fibonachi();
 
-
-// //////////////////////////////////////
-
 const fibonachiRecursion = function (number) {
     if (number <= 1) {     
         return number;        
-    } else {        
-        return fibonachiRecursion(number - 1) + fibonachiRecursion(number - 2);        
-    }
+    } 
+    return fibonachiRecursion(number - 1) + fibonachiRecursion(number - 2);        
 }
 
  const fibonachiMemoized = (function() {
-  const memory = {};
-  function func(number) {
-    let value;
-    if (number in memory) {
-        value = memory[number];
-    } else {
-      if (number === 0 || number === 1)
-        value = number;
-      else
-        value = func(number - 1) + func(number - 2);
-        memory[number] = value;
-    }
-    return value;
-  }
-  return func;
-})();
+    const memory = {};
+    return function func(number) {
+        if (typeof number !== 'number') {
+            throw new Error('Введены некоректные данные');
+        };
+        let value;
+        if (number in memory) {
+            value = memory[number];
+        } else {
+            if (number === 0 || number === 1)
+                value = number;
+            else
+                value = func(number - 1) + func(number - 2);
+            memory[number] = value;
+        };
+        console.log(memory);
+        return value;
+    };
+ })();
 
 // 19
 function* trafficLightGenerator () {
     while (true) {
-        yield red;
-        yield yellow
-        yield green
-        yield yellow
-    }
+        yield 'red';
+        yield 'yellow';
+        yield 'green';
+        yield 'yellow';
+    };
+}
+
+const trafficIterator = {
+    color: ['red', 'yellow', 'green', 'yellow'],
+    [Symbol.iterator]() {
+        return {
+            color: this.color,
+            index: 0,
+            next() {
+                if (this.index === this.color.length) {
+                    this.index = 0;
+                };
+                while (this.index < this.color.length) {
+                    return {
+                        value: this.color[this.index++],
+                        done: false,
+                    };
+                };
+            },
+        };
+    },
 }
 
 // 20 
 
-const checkIsNegativeNumber = function (num) {
-    return (num & (1 << 63)) === (1 << 63);
-    return num << -1;
+const checkIsNegativeNumber = function (number) {
+    if (typeof number !== 'number') {
+       throw new Error('Введены некоректные данные');
+    };
+    return (number & (1 << 31)) === (1 << 31);
 }
 
-const getNumberOfBits = function (num) {
-    num = toBinary((num >>> 0));
+const getNumberOfBits = function (number) {
+    if (typeof number !== 'number') {
+        throw new Error('Введены некоректные данные');
+    };
+    number = toBinary((number >>> 0));
     let zeroes = 32;
     let units = 0;
-    for (let number of num) {
-        if (number === '1') {
+    for (let num of number) {
+        if (num === '1') {
             units++;
         }
     }
@@ -583,20 +682,16 @@ const getNumberOfBits = function (num) {
     return result;
 }
 
-const bitwiseNotEasy = function (num) {
-    return -num - 1;
-}
-const bitwiseNot = function (num) {
-    return num ^ (-1);
+const bitwiseNotEasy = function (number) {
+    if (typeof number !== 'number') {
+        throw new Error('Введены некоректные данные');
+    };
+    return -number - 1;
 }
 
-let a = 1;
-let s = "";
-for (let i = 0; i < 100; i++) {
-    if ((a & (1 << i)) === (1 << i)) {
-        s += "1";
-    } else {
-        s += "0";
-    }
+const bitwiseNot = function (number) {
+    if (typeof number !== 'number') {
+        throw new Error('Введены некоректные данные');
+    };
+    return number ^ (-1);
 }
-console.log(s);
