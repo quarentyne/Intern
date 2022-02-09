@@ -486,10 +486,18 @@ const takeAverageTwoDimensionalArrayElements = function (array, callback) {
 // 15 
 
 const transposeMatrix = function (matrix) {
+    if (matrix.length === 0) {
+        throw new Error('Не была введена матрица');
+    };
     const transposed = [];
     const originalLength = matrix.length;
+    let maxLength = 0;
     for (let i = 0; i < originalLength; i++) {
+        maxLength = Math.max(maxLength, matrix[i].length);        
+    };
+    while (maxLength > 0) {
         transposed.push([]);
+        maxLength--;
     };
     for (let i = 0; i < originalLength; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
