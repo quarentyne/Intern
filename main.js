@@ -73,7 +73,7 @@ String.prototype.mySplit = function (separator, limit) {
 
 const checkIsAnagramm = function (firstString, secondString) {
     if (typeof firstString !== 'string' || typeof secondString !== 'string') {
-        throw new Error('Операция возможна только над строками');
+        throw new Error('Operators type have to be String');
     };
     firstString = firstString.deleteSpaces().toLowerCase();
     secondString = secondString.deleteSpaces().toLowerCase();
@@ -108,7 +108,7 @@ const checkIsAnagramm = function (firstString, secondString) {
 // С рекурсией 
 const getNumberAmoutRecursion = function (number, count) {
     if (typeof number !== 'number') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator type have to be Number');
     };
     count = count || 0;
     if (number > -10 && number < 10) {
@@ -121,7 +121,7 @@ const getNumberAmoutRecursion = function (number, count) {
 
 const getNumberAmout = function (number) {
     if (typeof number !== 'number') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator type have to be Number');
     };
     let count = 0;
     for (count; number >= 1; count++) {
@@ -134,7 +134,7 @@ const getNumberAmout = function (number) {
 
 const checkIsPalindrom = function (str) {
     if(typeof str !== 'string'){
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator type have to be String');
     };
     let result = true;
     for (let i = 0; i < str.length; i++) {
@@ -150,7 +150,7 @@ const checkIsPalindrom = function (str) {
 
 const getCountUniqWords = function (string) {
     if(typeof string !== 'string'){
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator type have to be String');
     };
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
     const stringWords = string.mySplit(' ').myFilter(value => value);
@@ -162,7 +162,7 @@ const getCountUniqWords = function (string) {
 
 const getWordsCount = function (string) {
     if(typeof string !== 'string'){
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator type have to be String');
     };
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
     const wordCount = {};
@@ -184,7 +184,7 @@ class Triangle {
     constructor(base, firstAdditionalSide, secondAdditionalSide) {
         if (typeof base !== 'number' || base < 1 || typeof firstAdditionalSide !== 'number' ||
             firstAdditionalSide < 1 || typeof secondAdditionalSide !== 'number' || secondAdditionalSide < 1) {
-            throw new Error('Введены некорректные данные');
+            throw new Error('Operators cannot be negative and have to be Numbers');
         };
         this.base = base;
         this.firstAdditionalSide = firstAdditionalSide;
@@ -203,7 +203,7 @@ class Triangle {
 class Circle {
     constructor(radius) {
         if (typeof radius !== 'number' || radius < 1) {
-            throw new Error('Введены некорректные данные');
+            throw new Error('Operator cannot be negative and have to be Number');
         };
         this.radius = radius;
     }
@@ -218,7 +218,7 @@ class Circle {
 class Rectangle {
     constructor(width, length) {
         if (typeof width !== 'number' || width < 1 || typeof length !== 'number' || length < 1) {
-            throw new Error('Введены некорректные данные');
+            throw new Error('Operators cannot be negative and have to be Numbers');
         };
         this.width = width;
         this.length = length;
@@ -236,47 +236,54 @@ class Rectangle {
 function TriangleConstructor(base, firstAdditionalSide, secondAdditionalSide) {
     if (typeof base !== 'number' || base < 1 || typeof firstAdditionalSide !== 'number' ||
         firstAdditionalSide < 1 || typeof secondAdditionalSide !== 'number' || secondAdditionalSide < 1) {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operators cannot be negative and have to be Numbers');
     };
     this.base = base;
     this.firstAdditionalSide = firstAdditionalSide;
     this.secondAdditionalSide = secondAdditionalSide;
-    this.getPerimeter = function () {
-        return this.base + this.firstAdditionalSide + this.secondAdditionalSide;
-    }
-    this.getSquare = function () {
-        let halfPerimeter = this.getPerimeter() / 2;
-        return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
-            (halfPerimeter - this.secondAdditionalSide))
-    }
+}
+
+TriangleConstructor.prototype.getPerimeter = function () {
+    return this.base + this.firstAdditionalSide + this.secondAdditionalSide;
+}
+
+TriangleConstructor.prototype.getSquare =  function () {
+    let halfPerimeter = this.getPerimeter() / 2;
+    return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
+        (halfPerimeter - this.secondAdditionalSide));
 }
 
 function CircleConstructor(radius) {
     if (typeof radius !== 'number' || radius < 1) {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator cannot be negative and have to be Number');
     };
     this.radius = radius;
-    this.getPerimeter = function () {
-        return 2 * this.radius * Math.PI;
-    }
-    this.getSquare = function () {
-        return Math.PI * (this.radius ** 2);
-    }
+}
+
+CircleConstructor.prototype.getPerimeter = function () {
+    return 2 * this.radius * Math.PI;
+}
+
+CircleConstructor.prototype.getSquare = function () {
+    return Math.PI * (this.radius ** 2);
 }
 
 function RectangleConstructor(length, width) {
     if (typeof width !== 'number' || width < 1 || typeof length !== 'number' || length < 1) {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operators cannot be negative and have to be Numbers');
     };
     this.length = length;
     this.width = width;
-    this.getPerimeter = function () {
-        return 2 * (this.length + this.width);
-    }
-    this.getSquare = function () {
-        return this.length * this.width;
-    }
 }
+
+RectangleConstructor.prototype.getPerimeter = function () {
+    return 2 * (this.length + this.width);
+}
+
+RectangleConstructor.prototype.getSquare = function () {
+    return this.length * this.width;
+}
+    
 
 //  8
 
@@ -284,7 +291,7 @@ const getFactorialMemo = (function () {
     const memory = {};
     return function recursionFact(number) {
         if (typeof number !== 'number') {
-            throw new Error('Введены некорректные данные');
+            throw new Error('Operator have to be Number');
         };
         if (number === 0) {
             return 1;
@@ -298,7 +305,7 @@ const getFactorialMemo = (function () {
 
 const getFactorialCycle = function (number) {
     if (typeof number !== 'number') {        
-        throw new Error('Введены некорректные данные');
+        throw new Error('Operator have to be Number');
     };
     let result = 1;
     for (let i = 1; i <= number; i++){
@@ -311,7 +318,7 @@ const getFactorialCycle = function (number) {
 // С рекурсией
 const getSummFromArrayRecursion = function (array, callback, result, index) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     result = result || null;
     index = index || 0;
@@ -330,7 +337,7 @@ const getSummFromArrayRecursion = function (array, callback, result, index) {
 // Без рекурсии
 const getSummFromArray = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     let result = null;
     for (let i = 0; i < array.length; i++) {
@@ -347,7 +354,7 @@ const getSummFromArray = function (array, callback) {
 
 const getElemsCount = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     let count = 0;
     for (let number of array) {
@@ -395,7 +402,7 @@ function toBinary(number) {
 
 const getSumTwoDimensionalArray = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     let result = null;
     for (let i = 0; i < array.length; i++) {
@@ -410,7 +417,7 @@ const getSumTwoDimensionalArray = function (array, callback) {
 
 const getElemsCountTwoDimensionalArray = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     let result = 0;
     for (let i = 0; i < array.length; i++) {
@@ -429,7 +436,7 @@ const getElemsCountTwoDimensionalArray = function (array, callback) {
 
 const getSumFromSegmentOfNumbers = function (min, max, callback) {
     if (typeof callback !== 'function' || typeof min !== 'number' || typeof max !== 'number') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Incorrect data entered. Minimum and maximum have to be Numbers. Callback have to be Function type');
     };
     let result = null;
     for (let i = min; i <= max; i++) {
@@ -444,7 +451,7 @@ const getSumFromSegmentOfNumbers = function (min, max, callback) {
 
 const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result) {
     if (typeof callback !== 'function' || typeof min !== 'number' || typeof max !== 'number') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Incorrect data entered. Minimum and maximum have to be Numbers. Callback have to be Function type');
     };
     result = result || null;
     if (min > max) {
@@ -463,7 +470,7 @@ const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result
 
 const takeAverageArrayElements = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     const filteredArray = array.myFilter(callback);
     return filteredArray.reduce((a, b) => a + b, 0) / filteredArray.length;
@@ -471,7 +478,7 @@ const takeAverageArrayElements = function (array, callback) {
 
 const takeAverageTwoDimensionalArrayElements = function (array, callback) {
     if (typeof callback !== 'function') {
-        throw new Error('Введены некорректные данные');
+        throw new Error('Callback have to be Function type');
     };
     let result = null;
     for (let i = 0; i < array.length; i++) {
@@ -487,7 +494,7 @@ const takeAverageTwoDimensionalArrayElements = function (array, callback) {
 
 const transposeMatrix = function (matrix) {
     if (matrix.length === 0) {
-        throw new Error('Не была введена матрица');
+        throw new Error('The input parameter must be a matrix');
     };
     const transposed = [];
     const originalLength = matrix.length;
@@ -514,7 +521,7 @@ const getMatrixSum = function (matrix1, matrix2) {
     const matrixSum = [];
     for (let i = 0; i < matrix1.length; i++) {
         if (matrix1[i].length !== matrix2[i].length) {
-            throw new Error('Эти массивы не могут быть просуммированы');
+            throw new Error('The arrays are not the same size. Addition not possible');
         };
         matrixSum[i] = [];
         for (let j = 0; j < matrix1[i].length; j++) {
@@ -563,7 +570,7 @@ const deleteColumnWithZero = function (array) {
 
 const takeActionOnMatrix = function (matrix, direction, resultFunction) {
     if (typeof direction !== 'function' || typeof resultFunction !== 'function') {
-        throw new Error('Эти массивы не могут быть просуммированы');
+        throw new Error('Check the introduced functions');
     };
     let elements = [];
     for (let i = 0; i < matrix.length; i++) {
@@ -650,7 +657,7 @@ const fibonachiRecursion = function (number) {
     const memory = {};
     return function func(number) {
         if (typeof number !== 'number') {
-            throw new Error('Введены некоректные данные');
+            throw new Error('Operator have to be Number');
         };
         let value;
         if (number in memory) {
@@ -701,14 +708,14 @@ const trafficIterator = {
 
 const checkIsNegativeNumber = function (number) {
     if (typeof number !== 'number') {
-       throw new Error('Введены некоректные данные');
+       throw new Error('Operator have to be Number');
     };
     return (number & (1 << 31)) === (1 << 31);
 }
 
 const getNumberOfBits = function (number) {
     if (typeof number !== 'number') {
-        throw new Error('Введены некоректные данные');
+        throw new Error('Operator have to be Number');
     };
     number = toBinary((number >>> 0));
     let zeroes = 32;
@@ -726,14 +733,26 @@ const getNumberOfBits = function (number) {
 
 const bitwiseNotEasy = function (number) {
     if (typeof number !== 'number') {
-        throw new Error('Введены некоректные данные');
+        throw new Error('Operator have to be Number');
     };
     return -number - 1;
 }
 
 const bitwiseNot = function (number) {
     if (typeof number !== 'number') {
-        throw new Error('Введены некоректные данные');
+        throw new Error('Operator have to be Number');
     };
     return number ^ (-1);
 }
+
+const bitwiseNot2 = function (number) {
+    let result = 0;
+    for (let i = 0; i < 32; i++){
+        if (((number >> i) & 1) !== 1) {
+            result = result | (1<<i);
+        }
+    }
+    return result
+}
+console.log(bitwiseNot2());
+
