@@ -754,5 +754,3 @@ const bitwiseNot2 = function (number) {
     }
     return result
 }
-console.log(bitwiseNot2());
-
