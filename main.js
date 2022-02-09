@@ -10,6 +10,19 @@ Array.prototype.myFilter = function (callback) {
     return result;
 };
 
+Array.prototype.mySort = function(){
+    for(let i = 0; i < this.length; i++) {
+        for(let j = 0; j < this.length; j++) {
+            if(this[j] > this[j + 1]){
+                let temp = this[j];
+                this[j] = this[j + 1];
+                this[j + 1] = temp;
+            };
+        };
+    };
+    return this;
+}
+
 Array.prototype.myJoin = function (separator) {
     let string;
     if (separator !== undefined) {
@@ -37,7 +50,7 @@ String.prototype.mySplitForSymbol = function () {
     return Array.from(this);
 };
 
-String.prototype.mySplitBySpaces = function (separator, limit) {
+String.prototype.mySplit = function (separator, limit) {
     limit = limit || null;
     let word = '';
     const wordsArray = [];
@@ -104,7 +117,6 @@ const getNumberAmoutRecursion = function (number, count) {
     count++;
     return getNumberAmoutRecursion(number / 10, count);
 }
-
 // Без рекурсии
 
 const getNumberAmout = function (number) {
@@ -113,7 +125,7 @@ const getNumberAmout = function (number) {
     };
     let count = 0;
     for (count; number >= 1; count++) {
-        num /= 10;
+        number /= 10;
     };
     return count;
 }
@@ -141,8 +153,7 @@ const getCountUniqWords = function (string) {
         throw new Error('Введены некорректные данные');
     };
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
-    const stringWords = string.mySplitBySpaces(' ').filter(value => value);
-    console.log(stringWords);
+    const stringWords = string.mySplit(' ').myFilter(value => value);
     const uniqWords = new Set(stringWords);
     return uniqWords.size;
 }
@@ -155,7 +166,7 @@ const getWordsCount = function (string) {
     };
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
     const wordCount = {};
-    const stringWords = string.mySplitBySpaces(' ').filter(value => value);
+    const stringWords = string.mySplit(' ').myFilter(value => value);
     for (let word of stringWords) {
         if (!wordCount[word]) {
             wordCount[word] = 1;
@@ -171,6 +182,10 @@ const getWordsCount = function (string) {
 // По классам
 class Triangle {
     constructor(base, firstAdditionalSide, secondAdditionalSide) {
+        if (typeof base !== 'number' || base < 1 || typeof firstAdditionalSide !== 'number' ||
+            firstAdditionalSide < 1 || typeof secondAdditionalSide !== 'number' || secondAdditionalSide < 1) {
+            throw new Error('Введены некорректные данные');
+        };
         this.base = base;
         this.firstAdditionalSide = firstAdditionalSide;
         this.secondAdditionalSide = secondAdditionalSide;
@@ -187,6 +202,9 @@ class Triangle {
 
 class Circle {
     constructor(radius) {
+        if (typeof radius !== 'number' || radius < 1) {
+            throw new Error('Введены некорректные данные');
+        };
         this.radius = radius;
     }
     getPerimeter() {
@@ -199,6 +217,9 @@ class Circle {
 
 class Rectangle {
     constructor(width, length) {
+        if (typeof width !== 'number' || width < 1 || typeof length !== 'number' || length < 1) {
+            throw new Error('Введены некорректные данные');
+        };
         this.width = width;
         this.length = length;
     }
@@ -213,6 +234,10 @@ class Rectangle {
 // Функция конструктор
 
 function TriangleConstructor(base, firstAdditionalSide, secondAdditionalSide) {
+    if (typeof base !== 'number' || base < 1 || typeof firstAdditionalSide !== 'number' ||
+        firstAdditionalSide < 1 || typeof secondAdditionalSide !== 'number' || secondAdditionalSide < 1) {
+        throw new Error('Введены некорректные данные');
+    };
     this.base = base;
     this.firstAdditionalSide = firstAdditionalSide;
     this.secondAdditionalSide = secondAdditionalSide;
@@ -227,6 +252,9 @@ function TriangleConstructor(base, firstAdditionalSide, secondAdditionalSide) {
 }
 
 function CircleConstructor(radius) {
+    if (typeof radius !== 'number' || radius < 1) {
+        throw new Error('Введены некорректные данные');
+    };
     this.radius = radius;
     this.getPerimeter = function () {
         return 2 * this.radius * Math.PI;
@@ -237,6 +265,9 @@ function CircleConstructor(radius) {
 }
 
 function RectangleConstructor(length, width) {
+    if (typeof width !== 'number' || width < 1 || typeof length !== 'number' || length < 1) {
+        throw new Error('Введены некорректные данные');
+    };
     this.length = length;
     this.width = width;
     this.getPerimeter = function () {
@@ -252,7 +283,7 @@ function RectangleConstructor(length, width) {
 const getFactorialMemo = (function () {
     const memory = {};
     return function recursionFact(number) {
-        if (typeof number !== 'number') {        
+        if (typeof number !== 'number') {
             throw new Error('Введены некорректные данные');
         };
         if (number === 0) {
@@ -261,9 +292,9 @@ const getFactorialMemo = (function () {
         if (!memory[number]) {
             memory[number] = recursionFact(number - 1);
         }
-        return number* memory[number];
+        return number * memory[number];
     };
-})()
+})();
 
 const getFactorialCycle = function (number) {
     if (typeof number !== 'number') {        
@@ -294,6 +325,7 @@ const getSummFromArrayRecursion = function (array, callback, result, index) {
     result += element;
     return getSummFromArrayRecursion(array, callback, result, ++index);
 }
+
 
 // Без рекурсии
 const getSummFromArray = function (array, callback) {
@@ -415,7 +447,7 @@ const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result
         throw new Error('Введены некорректные данные');
     };
     result = result || null;
-    if (min >= max) {
+    if (min > max) {
         return result;
     };
     if (callback(min)) {
@@ -429,7 +461,7 @@ const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result
 
 // 14
 
-const takeAverageArraysElements = function (array, callback) {
+const takeAverageArrayElements = function (array, callback) {
     if (typeof callback !== 'function') {
         throw new Error('Введены некорректные данные');
     };
@@ -437,7 +469,7 @@ const takeAverageArraysElements = function (array, callback) {
     return filteredArray.reduce((a, b) => a + b, 0) / filteredArray.length;
 }
 
-const takeAverageTwoDimensionalArraysElements = function (array, callback) {
+const takeAverageTwoDimensionalArrayElements = function (array, callback) {
     if (typeof callback !== 'function') {
         throw new Error('Введены некорректные данные');
     };
@@ -463,6 +495,9 @@ const transposeMatrix = function (matrix) {
         for (let j = 0; j < matrix[i].length; j++) {
             transposed[j].push(matrix[i][j]);
         };
+    };    
+    if (transposed[transposed.length - 1].length === 0) {
+            transposed.length = transposed.length - 1;
     };
     return transposed;
 }
@@ -506,7 +541,7 @@ const deleteColumnWithZero = function (array) {
     for (let key of deleteIndex.values()) {
         zeroesIndex.push(key);
     };
-    zeroesIndex.sort((a, b) => a - b);
+    zeroesIndex.mySort((a, b) => a - b);
     for (let key of zeroesIndex) {
         for (let i = 0; i < array.length; i++) {
             array[i].splice(key + count, 1);
@@ -530,7 +565,7 @@ const takeActionOnMatrix = function (matrix, direction, resultFunction) {
             };
         };
     };
-    return func(elements);
+    return resultFunction(elements);
 }
 
 // 18
@@ -619,7 +654,6 @@ const fibonachiRecursion = function (number) {
                 value = func(number - 1) + func(number - 2);
             memory[number] = value;
         };
-        console.log(memory);
         return value;
     };
  })();
