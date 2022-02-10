@@ -464,7 +464,7 @@ const getSumFromSegmentOfNumbersRecursion = function (min, max, callback, result
     return getSumFromSegmentOfNumbersRecursion(min, max, callback, result);
 }
 
-// Блок схема Intern\block diagram\ex13.jpg
+// Блок схема Intern\block diagram\diagram13.png
 
 // 14
 
