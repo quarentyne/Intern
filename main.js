@@ -8,20 +8,20 @@ Array.prototype.myFilter = function (callback) {
         }
     }
     return result;
-}
+};
 
 Array.prototype.myReduce = function () {
     let result = 0;
-    for (let i = 0; i < this.length; i++){
+    for (let i = 0; i < this.length; i++) {
         result += this[i];
     }
     return result;
-}
+};
 
-Array.prototype.mySort = function(){
-    for(let i = 0; i < this.length; i++) {
-        for(let j = 0; j < this.length; j++) {
-            if(this[j] > this[j + 1]){
+Array.prototype.mySort = function () {
+    for (let i = 0; i < this.length; i++) {
+        for (let j = 0; j < this.length; j++) {
+            if (this[j] > this[j + 1]) {
                 let temp = this[j];
                 this[j] = this[j + 1];
                 this[j + 1] = temp;
@@ -29,7 +29,7 @@ Array.prototype.mySort = function(){
         }
     }
     return this;
-}
+};
 
 Array.prototype.myJoin = function (separator) {
     let string;
@@ -39,7 +39,7 @@ Array.prototype.myJoin = function (separator) {
         string = this.toString();
     }
     return string;
-}
+};
 
 Array.prototype.myIncludes = function (element) {
     for (let item of this) {
@@ -48,11 +48,11 @@ Array.prototype.myIncludes = function (element) {
         }
     }
     return false;
-}
+};
 
 String.prototype.deleteSpaces = function () {
     return this.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '');
-}
+};
 
 String.prototype.mySplitForSymbol = function () {
     const result = [];
@@ -60,7 +60,7 @@ String.prototype.mySplitForSymbol = function () {
         result.push(item);
     }
     return result;
-}
+};
 
 String.prototype.mySplit = function (separator, limit) {
     limit = limit || null;
@@ -79,7 +79,7 @@ String.prototype.mySplit = function (separator, limit) {
         }
     }
     return wordsArray;
-}
+};
 
 //1 
 
@@ -94,7 +94,7 @@ const checkIsAnagramm = function (firstString, secondString) {
     }
     const firstArray = [];
     const secondArray = [];
-    for (let word of firstString){
+    for (let word of firstString) {
         firstArray.push(word);
     }
     for (let word of secondString) {
@@ -102,7 +102,7 @@ const checkIsAnagramm = function (firstString, secondString) {
     }
     firstArray.mySort();
     secondArray.mySort();
-    for (let i = 0; i < firstArray.length; i++){
+    for (let i = 0; i < firstArray.length; i++) {
         if (firstArray[i] !== secondArray[i]) {
             return false;
         }
@@ -123,7 +123,7 @@ const getNumberAmoutRecursion = function (number, count) {
     if (number > -10 && number < 10) {
         return ++count;
     }
-    return getNumberAmoutRecursion(number / 10, count+1);
+    return getNumberAmoutRecursion(number / 10, count + 1);
 }
 
 // Без рекурсии
@@ -142,7 +142,7 @@ const getNumberAmout = function (number) {
 // 4
 
 const checkIsPalindrom = function (string) {
-    if(typeof string !== 'string'){
+    if (typeof string !== 'string') {
         throw new Error('Operator type have to be String');
     }
     for (let i = 0; i < string.length; i++) {
@@ -156,7 +156,7 @@ const checkIsPalindrom = function (string) {
 // 5 
 
 const getCountUniqWords = function (string) {
-    if(typeof string !== 'string'){
+    if (typeof string !== 'string') {
         throw new Error('Operator type have to be String');
     }
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
@@ -173,7 +173,7 @@ const getCountUniqWords = function (string) {
 // 6 
 
 const getWordsCount = function (string) {
-    if(typeof string !== 'string'){
+    if (typeof string !== 'string') {
         throw new Error('Operator type have to be String');
     }
     string = string.deleteSpaces().toLowerCase().replace(/[^a-zа-яё\s]/g, '');
@@ -210,7 +210,7 @@ class Triangle {
         return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
             (halfPerimeter - this.secondAdditionalSide))
     }
-};
+}
 
 class Circle {
     constructor(radius) {
@@ -225,7 +225,7 @@ class Circle {
     getSquare() {
         return Math.PI * (this.radius ** 2);
     }
-};
+}
 
 class Rectangle {
     constructor(width, length) {
@@ -241,7 +241,7 @@ class Rectangle {
     getSquare() {
         return this.width * this.length;
     }
-};
+}
 
 // Функция конструктор
 
@@ -259,7 +259,7 @@ TriangleConstructor.prototype.getPerimeter = function () {
     return this.base + this.firstAdditionalSide + this.secondAdditionalSide;
 }
 
-TriangleConstructor.prototype.getSquare =  function () {
+TriangleConstructor.prototype.getSquare = function () {
     let halfPerimeter = this.getPerimeter() / 2;
     return Math.sqrt(halfPerimeter * (halfPerimeter - this.base) * (halfPerimeter - this.firstAdditionalSide) *
         (halfPerimeter - this.secondAdditionalSide));
@@ -316,11 +316,11 @@ const getFactorialMemo = (function () {
 })()
 
 const getFactorialCycle = function (number) {
-    if (typeof number !== 'number') {        
+    if (typeof number !== 'number') {
         throw new Error('Operator have to be Number');
     }
     let result = 1;
-    for (let i = 1; i <= number; i++){
+    for (let i = 1; i <= number; i++) {
         result *= i;
     }
     return result;
@@ -749,7 +749,7 @@ const bitwiseNot2 = function (number) {
     let result = 0;
     for (let i = 0; i < 32; i++){
         if (((number >> i) & 1) !== 1) {
-            result = result | (1<<i);
+            result |= (1<<i);
         }
     }
     return result;
