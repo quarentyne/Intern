@@ -655,7 +655,7 @@ const fibonachiRecursion = function (number) {
 // 
  const fibonachiMemoized = (function() {
     const memo = {};
-    return function func(number) {
+    return function fibonachiMemo(number) {
         if (typeof number !== 'number') {
             throw new Error('Operator have to be Number');
         }
@@ -665,7 +665,7 @@ const fibonachiRecursion = function (number) {
         if (number in memo) {
             return memo[number];
         }
-        memo[number] = func(number - 1) + func(number - 2);
+        memo[number] = fibonachiMemo(number - 1) + fibonachiMemo(number - 2);
         return memo[number];
     }
  })()
