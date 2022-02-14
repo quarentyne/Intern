@@ -83,11 +83,11 @@ Array.prototype.myReduce = function (callback, initialValue) {
     throw new Error('reduce of empty array with no initial value')
   }
 
-  let result = initialValue || 0;
+  let accumulator = initialValue || 0;
   for (let i = 0; i < this.length; i++) {
-    result = callback(result, this[i], i, this);
+    accumulator = callback(accumulator, this[i], i, this);
   }
-  return result;
+  return accumulator;
 };
 
 Array.prototype.myFind = function (callback) {
@@ -107,9 +107,9 @@ Array.prototype.myForEach = function (callback) {
   if (typeof callback !== "function") {
     throw new Error('Callback have to be Function type');
   }
-  
+
   for (let i = 0; i < this.length; i++) {
-    if (!this[i]) {
+    if (this[i] === undefined) {
       continue;
     }
     callback(this[i], i, this);
