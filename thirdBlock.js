@@ -1,134 +1,137 @@
 "use strict";
 
-class Node {
-  constructor(data) {
-		this.data = data;
-    this.leftChild = null;
-    this.rightChild = null;
-    this.parent = null;
-	}
-}
-
-class BinTree {
+class BinaryTree {
 	constructor() {
 		this.root = null;
 	}
-	
-  insert(newNode) {
-		// Если корень дерева пуст
-		if (this.root === null) {
-			this.root = newNode;
+
+	newElement(data) {
+		let object = Object.create(null);
+		object.data = data;
+		object.left = null;
+		object.right = null;
+		object.parent = null;
+		return object;
+	}
+
+	addNode(data) {
+		let newItem = this.newElement(data);
+		if (!this.root) {
+			this.root = newItem;
 			return;
 		}
-		
-		function insertInside(currentNode) {
-			if (newNode.data < currentNode.data) {
-				if (currentNode.leftChild !== null) {
-					insertInside(currentNode.leftChild);
-				} else {
-					newNode.parent = currentNode;
-					currentNode.leftChild = newNode;
+
+		function insert(currentNode){
+			if (newItem.data < currentNode.data) {
+				if (!currentNode.left) {
+					currentNode.left = newItem;	
+					newItem.parent = currentNode;
+					return;
 				}
-			} else {
-				if (currentNode.rightChild !== null) {
-					insertInside(currentNode.rightChild);
-				} else {
-					newNode.parent = currentNode;
-					currentNode.rightChild = newNode;
-				}
+				insert(currentNode.left);
+				return;
+			} 
+			if (!currentNode.right) {
+				currentNode.right = newItem;	
+					newItem.parent = currentNode;
+				return;
 			}
+			insert(currentNode.right);
+			return;
 		}
-		// Ищем куда вставить, стартуем с корня
-		insertInside(this.root);
+		insert(this.root);
 	}
-	
-	search(data) {
-		
-		function searchInside(currentNode) {
+
+	findNode(data) {
+		if (this.root.data === data) {
+			return this.root;
+		}
+
+		function search(currentNode) {
 			if (currentNode === null){
 				return null;
 			}
-			if (currentNode.data === data){
+			if (currentNode.data === data) {
 				return currentNode;
 			}
-			if (currentNode.data > data){
-				return searchInside(currentNode.leftChild);
+			if (currentNode.data < data) {
+				return search(currentNode.right);
 			}
-			else{
-				return searchInside(currentNode.rightChild);
-			}
+			return search(currentNode.left);
 		}
-		return searchInside(this.root);
+		return search(this.root);
 	}
 	
-	delete(data) {
-		// Для удаления элемента с одним, или нулем, наследников
-		function deleteOneOrNoChildElem(node) {
-			let newNode = null;
-			if (node.leftChild){
-				newNode = node.leftChild;
-			} else if (node.rightChild){
-				newNode = node.rightChild;
-			}			
+	deleteNode(data) {
+		let that = this;
+		function deleteNodeWithouChild(node) {
 			if (node.parent === null) {
-				this.root = newNode;
-			} else {
-				if (node.parent.leftChild === node) {
-					node.parent.leftChild = newNode;
-				} else {
-					node.parent.rightChild = newNode;
-				}
+				that.root = null;
 			}
-		}
-		// Для удаления элемента с двумя наследниками
-		function deleteTwoChildElem(node) {
-			let result = node.leftChild;
-			if (result.rightChild) {
-				while (result.rightChild) {
-					result = result.rightChild;
-				}
+			if (node.parent.left === node) {
+				node.parent.left = null;
+				return;
 			}
-			deleteOneOrNoChildElem(result);
-			let leftNodeChild = node.leftChild;
-			let rightNodeChild = node.rightChild;
-			
-			if (node.parent === null) {
-				result.leftChild = leftNodeChild;
-				result.rightChild = rightNodeChild;
-				this.root = result;
-			} else {
-				if (node.parent.leftChild === node) {
-					result.leftChild = leftNodeChild;
-					result.rightChild = rightNodeChild;
-					node.parent.leftChild = result;
-				} else {
-					result.leftChild = leftNodeChild;
-					result.rightChild = rightNodeChild;
-					node.parent.rightChild = result;
-				}
-			}
+			node.parent.right = null;
 		}
 		
-		let node = this.search(data);
-		if (node.leftChild && node.rightChild) {
-			deleteTwoChildElem.call(this, node);
-		}	else {
-			deleteOneOrNoChildElem.call(this, node);
-		}	
+		function deleteNodeWithouChild(node) {
+			
+			function changeParent(nextNode) {
+				if (node.parent === null) {
+					that.root = nextNode;
+					nextNode.parent = null;
+					return;
+				}
+				nextNode.parent = node.parent;
+				if (node.parent.left === node) {
+					node.parent.left = nextNode;
+				}
+				if (node.parent.right === node) {
+					node.parent.right = nextNode;
+				}
+			}
+			
+			let nextNode;
+			if (node.left) {
+				nextNode = node.left;
+				changeParent(nextNode);
+				return;
+			}
+			nextNode = node.right;
+			changeParent(nextNode);
+		}
+		
+		function deleteNodewithChildren(node) {
+			
+		}
+
+		let node = this.findNode(data)
+		if (!node.left && !node.right) {
+			deleteNodeWithouChild(node);
+		}
+		if ((node.left && !node.right) || (node.right && !node.left)) {
+			deleteNodeWithouChild(node);
+		}
+		if (node.left && node.right) {
+			deleteNodewithChildren(node);
+		}
+		
 	}
 }
+let tree = new BinaryTree();
+tree.addNode(10);
+tree.addNode(1);
+// tree.addNode(3);
+// tree.addNode(30);
+// tree.addNode(33);
+// tree.addNode(0);
+// tree.addNode(-1);
 
-let binTree = new BinTree();
-// binTree.insert(new Node(10))
-// binTree.insert(new Node(20))
-// binTree.insert(new Node(-10))
-// binTree.insert(new Node(30))
-// binTree.insert(new Node(41))
-// binTree.insert(new Node(25))
-// console.log(binTree);
-// console.log(binTree.search(41));
-// binTree.delete(20)
-// binTree.insert(new Node(22))
+// console.log(tree.findNode(1));
+console.log(tree.deleteNode(10));
+
+console.log(tree);
 
 
 
