@@ -21,25 +21,26 @@ class BinaryTree {
 			return;
 		}
 
-		function insert(currentNode){
+		function insertNewNode(currentNode){
 			if (newItem.data < currentNode.data) {
 				if (!currentNode.left) {
 					currentNode.left = newItem;	
 					newItem.parent = currentNode;
 					return;
 				}
-				insert(currentNode.left);
+				insertNewNode(currentNode.left);
 				return;
 			} 
+
 			if (!currentNode.right) {
 				currentNode.right = newItem;	
 					newItem.parent = currentNode;
 				return;
 			}
-			insert(currentNode.right);
-			return;
+			insertNewNode(currentNode.right);	
 		}
-		insert(this.root);
+
+		insertNewNode(this.root);
 	}
 
 	findNode(data) {
@@ -47,7 +48,7 @@ class BinaryTree {
 			return this.root;
 		}
 
-		function search(currentNode) {
+		function searchNode(currentNode) {
 			if (currentNode === null){
 				return null;
 			}
@@ -55,15 +56,31 @@ class BinaryTree {
 				return currentNode;
 			}
 			if (currentNode.data < data) {
-				return search(currentNode.right);
+				return searchNode(currentNode.right);
 			}
-			return search(currentNode.left);
+			return searchNode(currentNode.left);
 		}
-		return search(this.root);
+		return searchNode(this.root);
 	}
 	
 	deleteNode(data) {
 		let that = this;
+		
+		function changeParent(nextNode) {
+			if (node.parent === null) {
+				that.root = nextNode;
+				nextNode.parent = null;
+				return;
+			}
+			nextNode.parent = node.parent;
+			if (node.parent.left === node) {
+				node.parent.left = nextNode;
+			}
+			if (node.parent.right === node) {
+				node.parent.right = nextNode;
+			}
+		}
+		
 		function deleteNodeWithouChild(node) {
 			if (node.parent === null) {
 				that.root = null;
@@ -74,24 +91,8 @@ class BinaryTree {
 			}
 			node.parent.right = null;
 		}
-		
-		function deleteNodeWithouChild(node) {
-			
-			function changeParent(nextNode) {
-				if (node.parent === null) {
-					that.root = nextNode;
-					nextNode.parent = null;
-					return;
-				}
-				nextNode.parent = node.parent;
-				if (node.parent.left === node) {
-					node.parent.left = nextNode;
-				}
-				if (node.parent.right === node) {
-					node.parent.right = nextNode;
-				}
-			}
-			
+
+		function deleteNodeWithChild(node) {			
 			let nextNode;
 			if (node.left) {
 				nextNode = node.left;
@@ -103,7 +104,21 @@ class BinaryTree {
 		}
 		
 		function deleteNodewithChildren(node) {
+			let changedNode = node.left;
+			if (changedNode.right) {
+				while (changedNode.right) {
+					changedNode = changedNode.right;
+				}
+			}
+
+			changedNode.parent.right = changedNode.left;
+			changedNode.parent.right.parent = changedNode.parent;
+			changedNode.right = node.right;
+			changedNode.left = node.left;
+			node.left.parent = changedNode;
+			node.right.parent = changedNode;
 			
+			changeParent(changedNode);
 		}
 
 		let node = this.findNode(data)
@@ -111,27 +126,15 @@ class BinaryTree {
 			deleteNodeWithouChild(node);
 		}
 		if ((node.left && !node.right) || (node.right && !node.left)) {
-			deleteNodeWithouChild(node);
+			deleteNodeWithChild(node);
 		}
 		if (node.left && node.right) {
 			deleteNodewithChildren(node);
-		}
-		
+		}		
 	}
 }
-let tree = new BinaryTree();
-tree.addNode(10);
-tree.addNode(1);
-// tree.addNode(3);
-// tree.addNode(30);
-// tree.addNode(33);
-// tree.addNode(0);
-// tree.addNode(-1);
 
-// console.log(tree.findNode(1));
-console.log(tree.deleteNode(10));
 
-console.log(tree);
 
 
 
