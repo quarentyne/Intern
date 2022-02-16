@@ -47,6 +47,9 @@ class BinaryTree {
       this.root = newItem;
       return;
     }
+    if (!data) {
+      return;
+    }
 
     function insertNewNode(currentNode) {
       if (newItem.data < currentNode.data) {
@@ -155,6 +158,8 @@ class BinaryTree {
     if ((node.left && !node.right) || (!node.left && node.right)) {
       deleteNodeWithChild(node);
     }
-    deleteNodewithChildren(node);
+    if(node.left && node.right){
+      deleteNodewithChildren(node);
+    }    
   }
 }
