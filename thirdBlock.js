@@ -121,7 +121,7 @@ class BinaryTree {
 			changeParent(changedNode);
 		}
 
-		let node = this.findNode(data)
+		let node = this.findNode(data);
 		if (!node.left && !node.right) {
 			deleteNodeWithouChild(node);
 		}
@@ -134,34 +134,29 @@ class BinaryTree {
 	}
 }
 
+Array.prototype.insertionSort = function () {
+	for (let i = 1; i < this.length; i++) {
+		let currentItem = this[i];
+		let j = i;
+		while (j > 0 && this[j - 1] > currentItem) {
+			this[j] = this[j - 1];
+			this[j - 1] = currentItem;
+			j--;
+		}
+	}
+	return this;
+};
 
-
-
-
-
-
-const bubbleSort = function (array) {
-	for (let i = 0; i < array.length - 1; i++) {
-		for (let j = 0; j < array.length - 1 - i; j++) {
-			if (array[j] > array[j + 1]) {
-				let current = array[j];
-				array[j] = array[j + 1];
-				array[j + 1] = current;
+Array.prototype.bubbleSort = function () {
+	let length = this.length - 1;
+	for (let i = 0; i < length; i++) {
+		for (let j = 0; j < length - i; j++) {
+			if (this[j] > this[j + 1]) {
+				let currentItem = this[j];
+				this[j] = this[j + 1];
+				this[j + 1] = currentItem;
 			}
 		}
 	}
-	return array;
-};
-
-const insertionSort = function (array) {
-	for (let i = 0; i < array.length; i++) {
-		let current = array[i];
-		let j = i;
-		while (j > 0 && array[j - 1] > current) {
-			array[j] = array[j - 1];
-			j--;
-		}
-		array[j] = current;
-	}
-	return array;
+	return this;
 };
