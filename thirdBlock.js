@@ -1,10 +1,13 @@
 'use strict';
 
-Array.prototype.bubbleSort = function () {
+Array.prototype.bubbleSort = function (callback) {
+  if (typeof callback !== 'function') {
+    callback = (element1, element2) => element1 > element2;
+  }
   let length = this.length - 1;
   for (let i = 0; i < length; i++) {
     for (let j = 0; j < length - i; j++) {
-      if (this[j] > this[j + 1]) {
+      if (callback(this[j], this[j + 1])) {
         let currentItem = this[j];
         this[j] = this[j + 1];
         this[j + 1] = currentItem;
@@ -14,11 +17,15 @@ Array.prototype.bubbleSort = function () {
   return this;
 };
 
-Array.prototype.insertionSort = function () {
+Array.prototype.insertionSort = function (callback) {
+  if (typeof callback !== 'function') {
+    callback = (element1, element2) => element1 > element2;
+  }
   for (let i = 1; i < this.length; i++) {
-    let currentItem = this[i];
     let j = i;
-    while (j > 0 && this[j - 1] > currentItem) {
+    let currentItem = this[i];
+    while (j > 0 && callback(this[j - 1], currentItem)) {
+      
       this[j] = this[j - 1];
       this[j - 1] = currentItem;
       j--;
@@ -163,3 +170,23 @@ class BinaryTree {
     }    
   }
 }
+
+// let tree = new BinaryTree();
+// tree.addNode(10);
+// tree.addNode(30);
+// tree.addNode(33);
+// tree.addNode(7);
+// tree.addNode(9);
+// tree.addNode(8);
+// tree.addNode(4);
+// tree.addNode(5);
+// tree.addNode(6);
+// tree.addNode(0);
+// tree.addNode(3);
+// tree.addNode(1);
+// tree.addNode(2);
+// tree.addNode(-5);
+// tree.addNode(true);
+// console.log(tree);
+
+// console.log(tree.findNode(1));
