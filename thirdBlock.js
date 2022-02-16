@@ -24,20 +24,20 @@ class BinaryTree {
 		function insertNewNode(currentNode){
 			if (newItem.data < currentNode.data) {
 				if (!currentNode.left) {
-					currentNode.left = newItem;	
+					currentNode.left = newItem;
 					newItem.parent = currentNode;
 					return;
 				}
 				insertNewNode(currentNode.left);
 				return;
-			} 
+			}
 
 			if (!currentNode.right) {
-				currentNode.right = newItem;	
+				currentNode.right = newItem;
 					newItem.parent = currentNode;
 				return;
 			}
-			insertNewNode(currentNode.right);	
+			insertNewNode(currentNode.right);
 		}
 
 		insertNewNode(this.root);
@@ -62,10 +62,10 @@ class BinaryTree {
 		}
 		return searchNode(this.root);
 	}
-	
+
 	deleteNode(data) {
 		let that = this;
-		
+
 		function changeParent(nextNode) {
 			if (node.parent === null) {
 				that.root = nextNode;
@@ -80,7 +80,7 @@ class BinaryTree {
 				node.parent.right = nextNode;
 			}
 		}
-		
+
 		function deleteNodeWithouChild(node) {
 			if (node.parent === null) {
 				that.root = null;
@@ -92,7 +92,7 @@ class BinaryTree {
 			node.parent.right = null;
 		}
 
-		function deleteNodeWithChild(node) {			
+		function deleteNodeWithChild(node) {
 			let nextNode;
 			if (node.left) {
 				nextNode = node.left;
@@ -102,7 +102,7 @@ class BinaryTree {
 			nextNode = node.right;
 			changeParent(nextNode);
 		}
-		
+
 		function deleteNodewithChildren(node) {
 			let changedNode = node.left;
 			if (changedNode.right) {
@@ -117,7 +117,7 @@ class BinaryTree {
 			changedNode.left = node.left;
 			node.left.parent = changedNode;
 			node.right.parent = changedNode;
-			
+
 			changeParent(changedNode);
 		}
 
@@ -130,7 +130,7 @@ class BinaryTree {
 		}
 		if (node.left && node.right) {
 			deleteNodewithChildren(node);
-		}		
+		}
 	}
 }
 
