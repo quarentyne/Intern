@@ -35,49 +35,45 @@ Array.prototype.insertionSort = function (callback) {
 };
 
 class BinaryTree {
-  constructor() {
-    this.root = null;
+  constructor(data) {
+    // this.root = null;
+    if(data === 0 || data){
+      this.data = data;
+      this.left = null;
+      this.right = null;
+    } else {
+      throw new Error('Insert new data')
+    }    
   }
 
-  newElement(data) {
-    let newObject = Object.create(null);
-    newObject.data = data;
-    newObject.left = null;
-    newObject.right = null;
-    newObject.parent = null;
-    return newObject;
-  }
-
-  addNode(data) {
-    let newItem = this.newElement(data);
-    if (!this.root) {
-      this.root = newItem;
-      return;
-    }
-    if (!data) {
-      return;
-    }
-
-    function insertNewNode(currentNode) {
-      if (newItem.data < currentNode.data) {
-        if (!currentNode.left) {
-          currentNode.left = newItem;
-          newItem.parent = currentNode;
-          return;
-        }
-        insertNewNode(currentNode.left);
+  // newElement(data) {
+  //   let newObject = Object.create(null);
+  //   newObject.data = data;
+  //   newObject.left = null;
+  //   newObject.right = null;
+  //   newObject.parent = null;
+  //   return newObject;
+  // }
+  #insertNewNode(currentNode, newItem) {
+    if (newItem.data < currentNode.data) {
+      if (!currentNode.left) {
+        currentNode.left = newItem;
         return;
       }
+      insertNewNode(currentNode.left);
+      return;
+    }
     
-      if (!currentNode.right) {
-        currentNode.right = newItem;
-        newItem.parent = currentNode;
-        return;
-      }
-      insertNewNode(currentNode.right);
+    if (!currentNode.right) {
+      currentNode.right = newItem;
+      return;
     }
-
-    insertNewNode(this.root);
+    insertNewNode(currentNode.right);
+  }
+    
+  add(data) {
+    let newItem = new BinaryTree(data);
+    this.#insertNewNode(this, newItem);
   }
 
   findNode(data) {
@@ -171,21 +167,21 @@ class BinaryTree {
   }
 }
 
-// let tree = new BinaryTree();
-// tree.addNode(10);
-// tree.addNode(30);
-// tree.addNode(33);
-// tree.addNode(7);
-// tree.addNode(9);
-// tree.addNode(8);
-// tree.addNode(4);
-// tree.addNode(5);
-// tree.addNode(6);
-// tree.addNode(0);
-// tree.addNode(3);
-// tree.addNode(1);
-// tree.addNode(2);
-// tree.addNode(-5);
+let tree = new BinaryTree(10);
+console.log(tree);
+tree.add(30);
+tree.add(33);
+tree.add(7);
+tree.add(9);
+tree.add(8);
+tree.add(4);
+tree.add(5);
+tree.add(6);
+tree.add(0);
+tree.add(3);
+tree.add(1);
+tree.add(2);
+tree.add(-5);
 // tree.addNode(true);
 // console.log(tree);
 
