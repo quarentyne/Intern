@@ -35,13 +35,12 @@ Array.prototype.insertionSort = function (callback) {
 
 class BinaryTree {
   constructor(data) {
-    if (data === 0 || data) {
-      this.data = data;
-      this.left = null;
-      this.right = null;
-    } else {
+    if (!(data === 0 || data)) {
       throw new Error('Insert new data');
     }
+      this.data = data ?? null;
+      this.left = null;
+      this.right = null;
   }
 
   add(root) {
